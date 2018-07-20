@@ -11,6 +11,16 @@ function runScript () {
     var ypadding = 25;
     
     var dataList = [];
+    var attrArray = ["Bachelors" , "GISCountyName" , "LessthanHighschool" , "Miles of Interstate", "OnlyHighschool", "PovertyPer", "medianIncome", "someCollege", "unempolymentPer"];
+    
+    /*
+    var projection = d3.geo.albers()
+        .center([3.64, 33.60])
+        .rotate([95.55, 0, 0])
+        .parallels([22.91, 55.02])
+        .scale(2573.74)
+        .translate(mapwidth / 2, mapheight / 2);
+    */
     
     
     //set the inital characertistics of the map svg
@@ -52,12 +62,24 @@ function runScript () {
               if (spatialKey == nonSpatialKey){
                   console.log("The Keys Match!");
                   
-                  //join the two datasets together and push the object into the new master array
+                  var newRecord = {};
+                  newRecord.spatial = spatialCounty;
                   
+                  //join the two datasets together and push the object into the new master array
+                  attrArray.forEach(function (attr){
+                      var val = parseFloat(nonSpatialCounty[attr]);
+                      newRecord[attr] = val;
+                      
+                      
+                  });
+                  
+                  dataList.push(newRecord);
               }
-              
           }
         }
+        
+        console.log("Logging joined data!");
+        console.log(dataList);
         
     }).catch( function (error) {
         console.log("Something has failed" + error);
@@ -66,7 +88,7 @@ function runScript () {
         
     
     
-    console.log("testing");
+    console.log("testing, testing my test!");
     
 }
 
