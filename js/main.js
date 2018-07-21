@@ -9,10 +9,12 @@ function runScript () {
     var graphwidth = 400;
     var xpadding = 20;
     var ypadding = 25;
+    var barpadding = 2;
     
     var dataList = [];//array that will hold all of the master joined data, d3 will have to work with this array
     //array with the field name of interest in the master non-spatial table
     var attrArray = ["Bachelors" , "GISCountyName" , "LessthanHighschool" , "Miles of Interstate", "OnlyHighschool", "PovertyPer", "medianIncome", "someCollege", "unempolymentPer"];
+    var selectedField = attrArray[0];//the field that is currently selected in the dropdown
     
     var projection = d3.geoConicEqualArea()
         .center([3.64, 33.60])
@@ -23,6 +25,21 @@ function runScript () {
     
     var pathGenerator = d3.geoPath().projection(projection);
     
+    
+    //get the dropdown populated with field names
+    var dropdown = d3.select(".dropdown");
+    dropdown.selectAll(".dropdownItem")
+        .data(attrArray)
+        .enter()
+        .append("option")
+        .text(function (d) {return d})
+        .attr("value" , function (d) {return d});
+    
+    //change the selected value when the dropdown is changed
+    dropdown.on("change", function () {
+        var value = this.options[this.selectedIndex].value;
+        selectedField = value;
+    });
     
     //set the inital characertistics of the map svg
     var map = d3.select("#map")
@@ -35,10 +52,9 @@ function runScript () {
         .attr("width" , graphwidth);
     
     //set scales that will be used inside of the graph to scale the bars correctly
-    var ycord = "";
-    var xcord = '';
-    var color = '';
-    var height = '';
+    var xScale = d3.scaleLinear();
+    var colorScale = d3.scaleLinear();
+    var heightScale = d3.scaleLinear();
     
     
     
@@ -101,6 +117,7 @@ function runScript () {
         
     }
     
+    //adds the bars into the bar graph and gives them approprate color coding
     function createGraph () {
         console.log("create graph called");
         
@@ -111,13 +128,37 @@ function runScript () {
             .enter()
             .append("rect")
             .attr("class" , ".bars")
-            .attr("style", "fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)")
-            .attr("width" , "50")
-            .attr("height" , "100")
+            .style("fill" , function (d) {
+                return colorScale(d[selectedField]);
+            })
+            .attr("width" , graphwidth / dataList.length)
+            .attr("height" , function (d) {
+                return heightScale(d[selectedField]);
+            })
+            .attr("y" , function (d) {
+                return graphheight - heightScale(d[selectedField]);
+            })
             ;
         
     }
     
+    function modifyScales() {
+        
+        //define function to help d3 find min and max values for a selected field
+        function returnValue (d) {
+            return d[selectedField];
+        }
+        
+        //generate the min and max 
+        var max = d3.max(dataList , returnValue);
+        var min = d3.min(dataList, returnValue);
+        var inputDomain = [min, max];
+        
+        //update the input domains for each of the different graphic scales
+        xScale.domain(inputDomain).range([0 , graphwidth]);
+        colorScale.domain(inputDomain).range(["red" , "blue"]);
+        heightScale.domain(inputDomain).range([0 , graphheight]);
+    }
     
     
     //ajax function that starts to load data
@@ -126,12 +167,13 @@ function runScript () {
         d3.json("data/Counties.json")
     ]).then(function (files) {
         joinData(files);//merge data from the two different files together
-        createMap();
-        createGraph();
+        modifyScales();//modify the 3d scales according to the currently selected datafield
+        createMap();//add all of the geometry into the map
+        createGraph();//add all of the bars into the graph and style accordingly
 
         
     }).catch( function (error) {
-        console.log("Something has failed" + error);
+        console.log("Something has failed: " + error);
         
     });
         
