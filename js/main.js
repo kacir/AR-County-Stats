@@ -25,7 +25,6 @@ function runScript () {
     
     var pathGenerator = d3.geoPath().projection(projection);
     
-    
     //get the dropdown populated with field names
     var dropdown = d3.select(".dropdown");
     dropdown.selectAll(".dropdownItem")
@@ -52,7 +51,7 @@ function runScript () {
         .attr("width" , graphwidth);
     
     //set scales that will be used inside of the graph to scale the bars correctly
-    var xScale = d3.scaleLinear();
+    var xScale = d3.scaleOrdinal();
     var colorScale = d3.scaleLinear();
     var heightScale = d3.scaleLinear();
     
@@ -92,8 +91,6 @@ function runScript () {
                   attrArray.forEach(function (attr){
                       var val = parseFloat(nonSpatialCounty[attr]);
                       newRecord[attr] = val;
-                      
-                      
                   });
                   
                   dataList.push(newRecord);
@@ -138,6 +135,9 @@ function runScript () {
             .attr("y" , function (d) {
                 return graphheight - heightScale(d[selectedField]);
             })
+            .attr("x" , function (d) {
+                return xScale(d[selectedField]);
+            })
             ;
         
     }
@@ -149,15 +149,35 @@ function runScript () {
             return d[selectedField];
         }
         
+            
+        var fieldPositionsList = d3.range(0 , graphwidth, graphwidth / dataList.length);
+        
         //generate the min and max 
         var max = d3.max(dataList , returnValue);
         var min = d3.min(dataList, returnValue);
         var inputDomain = [min, max];
         
+        var tempList = [];
+        for (var i=0; i < dataList.length; i++) {
+            tempList.push(dataList[i][selectedField]);
+        }
+        
         //update the input domains for each of the different graphic scales
-        xScale.domain(inputDomain).range([0 , graphwidth]);
+        xScale.domain(tempList).range(fieldPositionsList);
         colorScale.domain(inputDomain).range(["red" , "blue"]);
         heightScale.domain(inputDomain).range([0 , graphheight]);
+    }
+    
+    function changeVariable () {
+        
+    }
+    
+    function highlight () {
+        
+    }
+    
+    function dehighlight () {
+        
     }
     
     
@@ -174,7 +194,6 @@ function runScript () {
         
     }).catch( function (error) {
         console.log("Something has failed: " + error);
-        
     });
         
     
