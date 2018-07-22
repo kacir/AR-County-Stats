@@ -36,8 +36,14 @@ function runScript () {
     
     //change the selected value when the dropdown is changed
     dropdown.on("change", function () {
-        var value = this.options[this.selectedIndex].value;
-        selectedField = value;
+        
+        console.log("change dropdown event triggered, starting to change graph");
+        selectedField = this.options[this.selectedIndex].value;
+        console.log("new field is " + selectedField);
+        
+        modifyScales();//update the scales to deal with the newly selected field
+        changeVariable();//change the graphs information
+        console.log("finished update");
     });
     
     //set the inital characertistics of the map svg
@@ -49,6 +55,10 @@ function runScript () {
     var graph = d3.select("#master-graph")
         .attr("height" , graphheight)
         .attr("width" , graphwidth);
+    
+    //graph title shown inside of svg
+    var graphTitle = d3.select(".graphTitle")
+        .text(selectedField);
     
     //set scales that will be used inside of the graph to scale the bars correctly
     var xScale = d3.scaleOrdinal();
@@ -124,7 +134,7 @@ function runScript () {
             .data(dataList)
             .enter()
             .append("rect")
-            .attr("class" , ".bars")
+            .attr("class" , "bars")
             .style("fill" , function (d) {
                 return colorScale(d[selectedField]);
             })
@@ -170,6 +180,27 @@ function runScript () {
     
     function changeVariable () {
         
+        //change the graph title information on the top of graph
+        graphTitle.text(selectedField);
+        
+        d3.selectAll(".bars")
+            .data(dataList)
+            .transition()
+            .duration(1000)
+            .style("fill" , function (d) {
+                return colorScale(d[selectedField]);
+            })
+            .attr("width" , graphwidth / dataList.length)
+            .attr("height" , function (d) {
+                return heightScale(d[selectedField]);
+            })
+            .attr("y" , function (d) {
+                return graphheight - heightScale(d[selectedField]);
+            })
+            .attr("x" , function (d) {
+                return xScale(d[selectedField]);
+            })
+            ;
     }
     
     function highlight () {
