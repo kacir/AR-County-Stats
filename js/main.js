@@ -68,6 +68,9 @@ function runScript () {
     
     
     
+    
+    
+    
     //merges the spatial and non-spatial data together into a single list of joined objects.
     //function is called after ajax request has been filled.
     function joinData (files) {
@@ -96,6 +99,7 @@ function runScript () {
                   
                   var newRecord = {};
                   newRecord.spatial = spatialCounty;
+                  newRecord.name = nonSpatialKey;
                   
                   //join the two datasets together and push the object into the new master array
                   attrArray.forEach(function (attr){
@@ -148,7 +152,16 @@ function runScript () {
             .attr("x" , function (d) {
                 return xScale(d[selectedField]);
             })
+            .on("mouseover", highlight)
+            .on("mouseout" , dehighlight)
             ;
+        
+        //add a tooltip to each bar element
+        bars.append("title")
+            .attr("class" , "tooltip")
+            .text(function(d) {
+                return d.name + " County: " + d[selectedField];
+        })
         
     }
     
@@ -200,15 +213,28 @@ function runScript () {
             .attr("x" , function (d) {
                 return xScale(d[selectedField]);
             })
+            .selectAll(".tooltip")
+            .text(function(d) {
+                return d.name + " County: " + d[selectedField];
+            })
             ;
+        
+            
+        
     }
     
     function highlight () {
-        
+        d3.select(this)
+            .transition()
+            .style("fill" , "orange");
     }
     
     function dehighlight () {
-        
+        d3.select(this)
+            .transition()
+            .style("fill" , function (d) {
+                return colorScale(d[selectedField]);
+            })
     }
     
     
