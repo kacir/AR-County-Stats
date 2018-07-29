@@ -16,14 +16,15 @@ function runScript () {
     var attrArray = ["Bachelors" , "GISCountyName" , "LessthanHighschool" , "Miles of Interstate", "OnlyHighschool", "PovertyPer", "medianIncome", "someCollege", "unempolymentPer"];
     var selectedField = attrArray[0];//the field that is currently selected in the dropdown
     
-    var projection = d3.geoConicEqualArea()
-        .center([3.64, 33.60])
+    //make the projection object which will help tranlate the json into an svg
+    var projection = d3.geoAlbers()
         .rotate([95.55, 0, 0])
         .parallels([22.91, 55.02])
-        .scale(2573.74)
-        .translate(mapwidth / 2, mapheight / 2);
-    
+        .scale(3073.74)
+        .translate( [mapwidth / 4 ,  -(mapheight / 4)]);
+
     var pathGenerator = d3.geoPath().projection(projection);
+
     
     //get the dropdown populated with field names
     var dropdown = d3.select(".dropdown");
@@ -97,17 +98,15 @@ function runScript () {
               if (spatialKey == nonSpatialKey){
                   console.log("The Keys Match!");
                   
-                  var newRecord = {};
-                  newRecord.spatial = spatialCounty;
-                  newRecord.name = nonSpatialKey;
+                  spatialCounty.name = nonSpatialKey;
                   
                   //join the two datasets together and push the object into the new master array
                   attrArray.forEach(function (attr){
                       var val = parseFloat(nonSpatialCounty[attr]);
-                      newRecord[attr] = val;
+                      spatialCounty[attr] = val;
                   });
                   
-                  dataList.push(newRecord);
+                  dataList.push(spatialCounty);
               }
           }
         }
@@ -120,11 +119,25 @@ function runScript () {
         console.log("create map called");
         
         var counties = map.selectAll(".counties")
-            .append("path")
             .data(dataList)
             .enter()
             .append("path")
-            .attr("class" , ".counties");
+            .attr("d", pathGenerator)
+            .attr("class" , function(d) {
+                return "counties" + " "  + d.name
+            })
+            .style("stroke" , "grey")
+            .attr("stroke-width" , "0.5px")
+            .style("fill" , function (d) {
+                return colorScale(d[selectedField]);
+            });
+        
+        counties.append("title")
+            .attr("class" , "tooltip")
+            .text(function(d) {
+                return d.name + " County: " + d[selectedField];
+        })
+        
         
     }
     
