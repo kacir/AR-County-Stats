@@ -20,8 +20,8 @@ function runScript () {
     var projection = d3.geoAlbers()
         .rotate([95.55, 0, 0])
         .parallels([22.91, 55.02])
-        .scale(3073.74)
-        .translate( [mapwidth / 4 ,  -(mapheight / 4)]);
+        .scale(4073.74)
+        .translate( [mapwidth / 10 ,  -(mapheight / 2)]);
 
     var pathGenerator = d3.geoPath().projection(projection);
 
@@ -124,13 +124,16 @@ function runScript () {
             .append("path")
             .attr("d", pathGenerator)
             .attr("class" , function(d) {
-                return "counties" + " "  + d.name
+                return "countyGeo" + " "  + d.name
             })
             .style("stroke" , "grey")
             .attr("stroke-width" , "0.5px")
             .style("fill" , function (d) {
                 return colorScale(d[selectedField]);
-            });
+            })
+            .on("mouseover", highlight)
+            .on("mouseout" , dehighlight);
+        
         
         counties.append("title")
             .attr("class" , "tooltip")
@@ -151,7 +154,9 @@ function runScript () {
             .data(dataList)
             .enter()
             .append("rect")
-            .attr("class" , "bars")
+            .attr("class" , function (d) {
+                return "bars " + d.name
+            })
             .style("fill" , function (d) {
                 return colorScale(d[selectedField]);
             })
@@ -232,7 +237,17 @@ function runScript () {
             })
             ;
         
-            
+        d3.selectAll(".countyGeo")
+            .data(dataList)
+            .transition()
+            .duration(1000)
+            .style("fill" , function (d) {
+                return colorScale(d[selectedField]);
+            })
+            .selectAll(".tooltip")
+            .text(function(d) {
+                return d.name + " County: " + d[selectedField];
+            });
         
     }
     
