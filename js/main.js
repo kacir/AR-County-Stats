@@ -13,8 +13,10 @@ function runScript () {
     
     var dataList = [];//array that will hold all of the master joined data, d3 will have to work with this array
     //array with the field name of interest in the master non-spatial table
-    var attrArray = ["Bachelors" , "GISCountyName" , "LessthanHighschool" , "Miles of Interstate", "OnlyHighschool", "PovertyPer", "medianIncome", "someCollege", "unempolymentPer"];
+    var attrArray = ["Bachelors" , "LessthanHighschool" , "Miles of Interstate", "OnlyHighschool", "PovertyPer", "medianIncome", "someCollege", "unempolymentPer"];
     var selectedField = attrArray[0];//the field that is currently selected in the dropdown
+    var attrArrayLabel = ["Percent of Population with Bachlors Degree" , "Percent of Population with less than a High school education" , "miles of Interstate" , "Percent of Popualtion a high school education" , "Percent of population in poverty" , "Median Household Income" , "Percent of Population with some college" , "Percent of population unemployed"];
+    var selectedLabel = attrArrayLabel[0];
     
     //make the projection object which will help tranlate the json into an svg
     var projection = d3.geoAlbers()
@@ -32,7 +34,7 @@ function runScript () {
         .data(attrArray)
         .enter()
         .append("option")
-        .text(function (d) {return d})
+        .text(function (d , i) {return attrArrayLabel[i]})
         .attr("value" , function (d) {return d});
     
     //change the selected value when the dropdown is changed
@@ -40,6 +42,7 @@ function runScript () {
         
         console.log("change dropdown event triggered, starting to change graph");
         selectedField = this.options[this.selectedIndex].value;
+        selectedLabel = attrArrayLabel[attrArray.indexOf(selectedField)];
         console.log("new field is " + selectedField);
         
         modifyScales();//update the scales to deal with the newly selected field
@@ -212,7 +215,7 @@ function runScript () {
     function changeVariable () {
         
         //change the graph title information on the top of graph
-        graphTitle.text(selectedField);
+        graphTitle.text(selectedLabel);
         
         d3.selectAll(".bars")
             .data(dataList)
@@ -252,13 +255,21 @@ function runScript () {
     }
     
     function highlight () {
-        d3.select(this)
+        var countyClass = "." + d3.select(this).attr("class").split(" ")[1];
+        
+        console.log(countyClass);
+        
+        d3.selectAll(countyClass)
             .transition()
             .style("fill" , "orange");
     }
     
     function dehighlight () {
-        d3.select(this)
+        var countyClass = "." + d3.select(this).attr("class").split(" ")[1];
+        
+        console.log(countyClass);
+        
+        d3.selectAll(countyClass)
             .transition()
             .style("fill" , function (d) {
                 return colorScale(d[selectedField]);
