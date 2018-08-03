@@ -6,7 +6,10 @@
 		<title>AR Counties</title>
 
 		<!--put your external stylesheet links here-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://bootswatch.com/4/flatly/bootstrap.min.css">
         <link rel="stylesheet" href="css/style.css">
+        
         
 
         
@@ -15,26 +18,42 @@
 	<body>
 		<!--you can also use this space for internal scripts or stylesheets;
 		place these within <script> or <style> tags-->
-        <h1>Arkansas Counties Statistics</h1>
-        <div>
-            <h4>Select an Attribute</h4>
-            <select class="dropdown">
-            </select>
-        </div>
+        <header><h1>Arkansas Counties Statistics</h1></header>
+        <br/>
         
-        <div>
-            <svg id="map" class="svgpanel"></svg>
+        <div class="container">
             
-            <div class="panelright">
-                <h3 class="graphTitle">Graph Title</h3>
-                <svg id="master-graph" ></svg>
+            <div class="row">
+                <div id="dropdownDiv" class="col-lg-12 p-5 group">
+                    <center>
+                    <h4>Select an Attribute</h4>
+                    <select class="dropdown">
+                    </select>
+                    <p>Some kind of text explaining how the information is set up</p>
+                    </center>
+                </div>
+                
+                <div class="col-lg-6 p-5 group">
+                    <h3 >Counties in Arkansas</h3>
+                    <svg id="map" class="svgpanel"></svg>
+                </div>
+            
+                <div class="col-lg-6  group">
+                    <h3 class="graphTitle">Graph Title</h3>
+                    <br/>
+                    <svg id="master-graph" ></svg>
+                </div>
+            
             </div>
         </div>
-		
+        
+        <br/>
+        <footer>These tools were made possible with the following javascript libraires, d3, and jquery</footer>
 	</body>
     
             <!--put your external script links here-->
         <script type="text/javascript" src="lib/d3.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script type="text/javascript" src="lib/d3-geo.js"></script>
         <script type="text/javascript" src="js/main.js"></script>
         

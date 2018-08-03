@@ -3,6 +3,27 @@
     font: bold 30px sans-serif;
 }
 
-h3 {
+h3, h1, footer {
     text-align: center;
+}
+
+h3 {
+    padding-top: 5%;
+}
+
+div.group {
+    border-style: solid;
+    border-color: black;
+    border-radius: 15px;
+    border-width: 1.5px;
+    
+    background-color : #E0E0E0;
+}
+
+svg {
+    margin: 3%;
+}
+
+body {
+    padding-top : 3%;
 }

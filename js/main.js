@@ -1,7 +1,7 @@
 function runScript () {
     
     //set some constants that will be used to determine the size of the map
-    var mapheight = 300;
+    var mapheight = 400;
     var mapwidth = 400;
     
     //set some constants that will be used to determine the size of the graphic
@@ -23,7 +23,7 @@ function runScript () {
         .rotate([95.55, 0, 0])
         .parallels([22.91, 55.02])
         .scale(4073.74)
-        .translate( [mapwidth / 10 ,  -(mapheight / 2)]);
+        .translate( [mapwidth / 10 ,  -(mapheight / 8)]);
 
     var pathGenerator = d3.geoPath().projection(projection);
 
@@ -208,7 +208,7 @@ function runScript () {
         
         //update the input domains for each of the different graphic scales
         xScale.domain(tempList).range(fieldPositionsList);
-        colorScale.domain(inputDomain).range(["red" , "blue"]);
+        colorScale.domain(inputDomain).range(["yellow" ,"green"]);
         heightScale.domain(inputDomain).range([0 , graphheight]);
     }
     
