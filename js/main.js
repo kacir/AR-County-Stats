@@ -7,8 +7,15 @@ function runScript () {
     //set some constants that will be used to determine the size of the graphic
     var graphheight = 400;
     var graphwidth = 400;
-    var xpadding = 20;
-    var ypadding = 25;
+    
+    var graphPaddingRight = 20;
+    var graphPaddingLeft = 2;
+    var graphPaddingBottom = 5;
+    
+    var chartInnerWidth = graphwidth - graphPaddingRight - graphPaddingLeft;
+    var chartInnerHeight = graphheight - graphPaddingBottom;
+    var translate = "translate(" + graphPaddingLeft + "," + graphPaddingBottom + ")";
+    
     var barpadding = 2;
     
     var dataList = [];//array that will hold all of the master joined data, d3 will have to work with this array
@@ -69,6 +76,8 @@ function runScript () {
     var colorScale = d3.scaleLinear();
     var heightScale = d3.scaleLinear();
     
+    var yAxis = d3.axisLeft()
+        .scale(heightScale);
     
     
     
@@ -182,7 +191,11 @@ function runScript () {
             .attr("class" , "tooltip")
             .text(function(d) {
                 return d.name + " County: " + d[selectedField];
-        })
+        });
+        
+        graph.append("g")
+            .attr("class" , "yAxis")
+            .call(yAxis);
         
     }
     
@@ -210,6 +223,10 @@ function runScript () {
         xScale.domain(tempList).range(fieldPositionsList);
         colorScale.domain(inputDomain).range(["yellow" ,"green"]);
         heightScale.domain(inputDomain).range([0 , graphheight]);
+        
+        //modify and update the yAxis scale to match to updated underlaying scale for height
+        yAxis.scale(heightScale);
+        
     }
     
     function changeVariable () {
@@ -254,14 +271,26 @@ function runScript () {
         
     }
     
-    function highlight () {
+    function highlight (d) {
         var countyClass = "." + d3.select(this).attr("class").split(" ")[1];
-        
-        console.log(countyClass);
         
         d3.selectAll(countyClass)
             .transition()
             .style("fill" , "orange");
+        
+        var coords = d3.mouse(this);
+        
+        var divPopup = d3.select("#tooltip-popup")
+            .classed("hidden", false)
+            .style("left" , coords[0] + "px")
+            .style("top" , coords[1] + "px");
+        
+        divPopup.select("h4")
+            .text(d.name + " County: ");
+        
+        divPopup.select("p")
+            .text( selectedLabel + " Value is " + d[selectedField]);
+        
     }
     
     function dehighlight () {
@@ -273,8 +302,13 @@ function runScript () {
             .transition()
             .style("fill" , function (d) {
                 return colorScale(d[selectedField]);
-            })
+            });
+        
+        var divPopup = d3.select("#tooltip-popup")
+            .classed("hidden", true);
     }
+    
+    
     
     
     //ajax function that starts to load data

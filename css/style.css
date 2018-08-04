@@ -27,3 +27,38 @@ svg {
 body {
     padding-top : 3%;
 }
+
+title.tooltip {
+    pointer-events: none;
+}
+
+
+#tooltip-popup {
+    position: absolute;
+    border-radius: 15px;
+    border-style: solid;
+    border-width: 3px;
+    border-color: black;
+    background-color: white;
+    padding : 1.5%;
+    
+    -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+	-moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    
+    //**prevent mouseover event from being triggered when box is moused over **//
+	pointer-events: none;
+}
+
+#tooltip-popup h4 {
+    font-size: 14px;
+    text-align: center;
+}
+
+#tooltip-popup p {
+    font-size: 12px;
+}
+
+#tooltip-popup.hidden {
+    display: none;
+}
