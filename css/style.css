@@ -33,7 +33,7 @@ title.tooltip {
 }
 
 
-#tooltip-popup {
+.tooltip-popup {
     position: absolute;
     border-radius: 15px;
     border-style: solid;
@@ -50,15 +50,15 @@ title.tooltip {
 	pointer-events: none;
 }
 
-#tooltip-popup h4 {
+.tooltip-popup h4 {
     font-size: 14px;
     text-align: center;
 }
 
-#tooltip-popup p {
+.tooltip-popup p {
     font-size: 12px;
 }
 
-#tooltip-popup.hidden {
+.hidden {
     display: none;
 }

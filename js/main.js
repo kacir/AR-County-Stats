@@ -127,10 +127,12 @@ function runScript () {
         console.log(dataList);
     }
     
+    //function populates map svg with elements
     function createMap () {
         console.log("create map called");
         
-        var counties = map.selectAll(".counties")
+        //add and style county geometries
+        var counties = map.selectAll(".countyGeo")
             .data(dataList)
             .enter()
             .append("path")
@@ -144,9 +146,9 @@ function runScript () {
                 return colorScale(d[selectedField]);
             })
             .on("mouseover", highlight)
-            .on("mouseout" , dehighlight);
+            .on("mouseout" , dehighlight);//apply event binding so quick popups will show up on each element
         
-        
+        //add title elements to each svg element
         counties.append("title")
             .attr("class" , "tooltip")
             .text(function(d) {
@@ -193,6 +195,7 @@ function runScript () {
                 return d.name + " County: " + d[selectedField];
         });
         
+        //add an axis to the bargraph
         graph.append("g")
             .attr("class" , "yAxis")
             .call(yAxis);
@@ -234,6 +237,7 @@ function runScript () {
         //change the graph title information on the top of graph
         graphTitle.text(selectedLabel);
         
+        //change the style of the bar elemenets in graph
         d3.selectAll(".bars")
             .data(dataList)
             .transition()
@@ -251,12 +255,13 @@ function runScript () {
             .attr("x" , function (d) {
                 return xScale(d[selectedField]);
             })
-            .selectAll(".tooltip")
+            .selectAll(".tooltip")//chanage the contents of the tooltip for each bar
             .text(function(d) {
                 return d.name + " County: " + d[selectedField];
             })
             ;
         
+        //change the map based elemeents
         d3.selectAll(".countyGeo")
             .data(dataList)
             .transition()
@@ -271,41 +276,62 @@ function runScript () {
         
     }
     
+    //function that highlights both bar and county geometry and places cooresponding div popup
     function highlight (d) {
+        //get the second class in the object of svg element that called function, the second class in the list is the county name
         var countyClass = "." + d3.select(this).attr("class").split(" ")[1];
         
+        //select both the county geometry and bar elements and color code them
         d3.selectAll(countyClass)
             .transition()
-            .style("fill" , "orange");
+            .style("fill" , "red");
         
-        var coords = d3.mouse(this);
+        var coords = d3.mouse(this);//retrieve the relitive position of the mouse to the svg geometry or bar element
         
-        var divPopup = d3.select("#tooltip-popup")
-            .classed("hidden", false)
-            .style("left" , coords[0] + "px")
-            .style("top" , coords[1] + "px");
+        //there are two different divs for popups which are identical. one is for the map and one is for the graph.
+        //I tried to have just one and change the poistion but it did not work correctly. The positions are relitive to the object
+        //the div is inside. I worked around this by having two divs inside the colums for each svg. for the code to work
+        //properly I need to determine which type of object is calling this function, a map geometry or a bar.
+        //depending on which is calling I will set up the popup for either the map or graph but not both.
+        if (d3.select(this).attr("class").split(" ")[0] == "countyGeo") {
+            var divPopup = d3.select("#tooltip-popup-map");
+        } else {
+            var divPopup = d3.select("#tooltip-popup-graph");
+        }
         
+        //change the content of the popup header
         divPopup.select("h4")
             .text(d.name + " County: ");
         
+        //change the number values inside of the popup.
         divPopup.select("p")
             .text( selectedLabel + " Value is " + d[selectedField]);
         
+        //remove the .hidden class so the CSS rules making it not display are removed. Then place according the the mouse position
+        divPopup.classed("hidden", false)
+            .transition()
+            .style("left" , coords[0] + "px")
+            .style("top" , coords[1] + "px");
+        
     }
     
+    //function that removes hightlight coloring and popups when either map or graph are moused out
     function dehighlight () {
+        //get the second class in the object of svg element that called function, the second class in the list is the county name
         var countyClass = "." + d3.select(this).attr("class").split(" ")[1];
         
         console.log(countyClass);
         
+        //select both the map geometry and bar with the same corresponding county class, then apply colors for highlighting
         d3.selectAll(countyClass)
             .transition()
             .style("fill" , function (d) {
                 return colorScale(d[selectedField]);
             });
         
-        var divPopup = d3.select("#tooltip-popup")
-            .classed("hidden", true);
+        //change the class for both div popups of they both are not shown
+        var divPopup = d3.selectAll(".tooltip-popup")
+            .classed("hidden", true);//hide div through css rules applyed to the .hidden class
     }
     
     
