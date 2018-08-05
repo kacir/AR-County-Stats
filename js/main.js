@@ -75,9 +75,10 @@ function runScript () {
     var xScale = d3.scaleOrdinal();
     var colorScale = d3.scaleLinear();
     var heightScale = d3.scaleLinear();
+    var heightScaleReversed = d3.scaleLinear();
     
     var yAxis = d3.axisLeft()
-        .scale(heightScale);
+        .scale(heightScaleReversed);
     
     
     
@@ -131,8 +132,17 @@ function runScript () {
     function createMap () {
         console.log("create map called");
         
+                //give the graph a background color of some kind using a recangle coverting the background of the entire svg
+        map.append("rect")
+            .attr("width" , graphwidth)
+            .attr("height", graphheight)
+            .style("fill" , "white");
+        
         //add and style county geometries
-        var counties = map.selectAll(".countyGeo")
+        var counties = map
+            .append("g")
+            .attr("class" , "mapCanvas")
+            .selectAll(".countyGeo")
             .data(dataList)
             .enter()
             .append("path")
@@ -164,7 +174,17 @@ function runScript () {
         
         var fistAttr = attrArray[0];
         
-        var bars = graph.selectAll(".bars")
+        //give the graph a background color of some kind using a recangle coverting the background of the entire svg
+        graph.append("rect")
+            .attr("width" , graphwidth)
+            .attr("height", graphheight)
+            .style("fill" , "white");
+        
+        var bars = graph
+            .append("g")
+            .attr("class" , "barSpace")
+            .attr("transform" , "translate(20, 0) scale(0.9,1)")
+            .selectAll(".bars")
             .data(dataList)
             .enter()
             .append("rect")
@@ -179,11 +199,13 @@ function runScript () {
                 return heightScale(d[selectedField]);
             })
             .attr("y" , function (d) {
-                return graphheight - heightScale(d[selectedField]);
+                return graphheight  - heightScale(d[selectedField]);
             })
             .attr("x" , function (d) {
                 return xScale(d[selectedField]);
             })
+            .attr("stroke" , "white")
+            .attr("stroke-width" , 0.5)
             .on("mouseover", highlight)
             .on("mouseout" , dehighlight)
             ;
@@ -198,6 +220,7 @@ function runScript () {
         //add an axis to the bargraph
         graph.append("g")
             .attr("class" , "yAxis")
+            .attr("transform" , "translate(20, 0)")
             .call(yAxis);
         
     }
@@ -226,9 +249,14 @@ function runScript () {
         xScale.domain(tempList).range(fieldPositionsList);
         colorScale.domain(inputDomain).range(["yellow" ,"green"]);
         heightScale.domain(inputDomain).range([0 , graphheight]);
+        heightScaleReversed.domain([max, min]).range([0 , graphheight]);
         
         //modify and update the yAxis scale to match to updated underlaying scale for height
-        yAxis.scale(heightScale);
+        yAxis.scale(heightScaleReversed);
+        d3.selectAll(".yAxis")
+            .transition()
+            .duration(1000)
+            .call(yAxis);
         
     }
     
