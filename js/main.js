@@ -4,19 +4,21 @@ function runScript () {
     var mapheight = 400;
     var mapwidth = 400;
     
+    var mapPaddingRight = 15;
+    var mapPaddingLeft = 15;
+    var mapPaddingTop = 15;
+    var mapPaddingBottom = 15;
+    
+    
     //set some constants that will be used to determine the size of the graphic
     var graphheight = 400;
     var graphwidth = 400;
     
-    var graphPaddingRight = 20;
-    var graphPaddingLeft = 2;
-    var graphPaddingBottom = 5;
+    var graphPaddingRight = 15;
+    var graphPaddingLeft = 25;
+    var graphPaddingBottom = 20;
+    var graphPaddingTop = 20;
     
-    var chartInnerWidth = graphwidth - graphPaddingRight - graphPaddingLeft;
-    var chartInnerHeight = graphheight - graphPaddingBottom;
-    var translate = "translate(" + graphPaddingLeft + "," + graphPaddingBottom + ")";
-    
-    var barpadding = 2;
     
     var dataList = [];//array that will hold all of the master joined data, d3 will have to work with this array
     //array with the field name of interest in the master non-spatial table
@@ -59,13 +61,13 @@ function runScript () {
     
     //set the inital characertistics of the map svg
     var map = d3.select("#map")
-        .attr("height" , mapheight)
-        .attr("width", mapwidth);
+        .attr("height" , mapheight + mapPaddingTop + mapPaddingBottom)
+        .attr("width", mapwidth + mapPaddingRight + mapPaddingLeft);
     
     //set the intial charactersitcs of the graph svg
     var graph = d3.select("#master-graph")
-        .attr("height" , graphheight)
-        .attr("width" , graphwidth);
+        .attr("height" , graphheight + graphPaddingBottom + graphPaddingTop)
+        .attr("width" , graphwidth + graphPaddingRight + graphPaddingLeft);
     
     //graph title shown inside of svg
     var graphTitle = d3.select(".graphTitle")
@@ -132,16 +134,19 @@ function runScript () {
     function createMap () {
         console.log("create map called");
         
-                //give the graph a background color of some kind using a recangle coverting the background of the entire svg
+        //give the graph a background color of some kind using a recangle coverting the background of the entire svg
         map.append("rect")
-            .attr("width" , graphwidth)
-            .attr("height", graphheight)
+            .attr("width", mapwidth + mapPaddingRight + mapPaddingLeft)
+            .attr("height" , mapheight + mapPaddingTop + mapPaddingBottom)
             .style("fill" , "white");
         
+        mapInterior = map.append("g")
+            .attr("class" , "background")
+            .attr("transform", "translate(" + mapPaddingLeft + "," + mapPaddingTop + ")");
+        
+        
         //add and style county geometries
-        var counties = map
-            .append("g")
-            .attr("class" , "mapCanvas")
+        var counties = mapInterior
             .selectAll(".countyGeo")
             .data(dataList)
             .enter()
@@ -174,20 +179,24 @@ function runScript () {
         
         var fistAttr = attrArray[0];
         
-        //give the graph a background color of some kind using a recangle coverting the background of the entire svg
         graph.append("rect")
-            .attr("width" , graphwidth)
-            .attr("height", graphheight)
-            .style("fill" , "white");
+            .attr("width" , graphwidth + graphPaddingRight + graphPaddingLeft)
+            .attr("height", graphheight + graphPaddingBottom + graphPaddingTop)
+            .attr("class" , "background")
+            .style("fill" , "white")
         
-        var bars = graph
-            .append("g")
+        //give the graph a background color of some kind using a recangle coverting the background of the entire svg
+        var chartInterior = graph.append("g")
             .attr("class" , "barSpace")
-            .attr("transform" , "translate(20, 0) scale(0.9,1)")
+            .attr("transform", "translate(" + graphPaddingLeft + "," + graphPaddingTop + ")");
+        
+        
+        var bars = chartInterior
             .selectAll(".bars")
             .data(dataList)
             .enter()
             .append("rect")
+            .attr("transform" , "translate(20, 0) scale(0.9,1)")
             .attr("class" , function (d) {
                 return "bars " + d.name
             })
@@ -218,7 +227,7 @@ function runScript () {
         });
         
         //add an axis to the bargraph
-        graph.append("g")
+        chartInterior.append("g")
             .attr("class" , "yAxis")
             .attr("transform" , "translate(20, 0)")
             .call(yAxis);
