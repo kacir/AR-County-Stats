@@ -16,23 +16,23 @@ function runScript () {
     
     var graphPaddingRight = 15;
     var graphPaddingLeft = 25;
-    var graphPaddingBottom = 20;
+    var graphPaddingBottom = 40;
     var graphPaddingTop = 20;
     
     
     var dataList = [];//array that will hold all of the master joined data, d3 will have to work with this array
     //array with the field name of interest in the master non-spatial table
-    var attrArray = ["Bachelors" , "LessthanHighschool" , "Miles of Interstate", "OnlyHighschool", "PovertyPer", "medianIncome", "someCollege", "unempolymentPer"];
+    var attrArray = ["percentMale" , "percentFemale" , "medianAge", "percentOneRace", "percentWhite", "percentBlack", "percentHispanic", "percentTrump" , "percentClinton" ];
     var selectedField = attrArray[0];//the field that is currently selected in the dropdown
-    var attrArrayLabel = ["Percent of Population with Bachlors Degree" , "Percent of Population with less than a High school education" , "miles of Interstate" , "Percent of Popualtion a high school education" , "Percent of population in poverty" , "Median Household Income" , "Percent of Population with some college" , "Percent of population unemployed"];
+    var attrArrayLabel = ["Percent Male" , "Percent Female" , "Median Age" , "Percent One Race" , "Percent White" , "Percent Black" , "Percent Hispanic" , "Percent Trump" , "Percent Clinton"];
     var selectedLabel = attrArrayLabel[0];
     
     //make the projection object which will help tranlate the json into an svg
     var projection = d3.geoAlbers()
         .rotate([95.55, 0, 0])
         .parallels([22.91, 55.02])
-        .scale(4073.74)
-        .translate( [mapwidth / 10 ,  -(mapheight / 8)]);
+        .scale(1573.74)
+        .translate( [0 ,  0]);
 
     var pathGenerator = d3.geoPath().projection(projection);
 
@@ -71,7 +71,7 @@ function runScript () {
     
     //graph title shown inside of svg
     var graphTitle = d3.select(".graphTitle")
-        .text(selectedField);
+        .text(selectedLabel);
     
     //set scales that will be used inside of the graph to scale the bars correctly
     var xScale = d3.scaleOrdinal();
@@ -102,26 +102,27 @@ function runScript () {
         
         //join the spatial and non spatial data together
         for (var i=0; i < nonSpatialData.length; i++) {
-            var nonSpatialCounty = nonSpatialData[i];
-            var nonSpatialKey = nonSpatialCounty.GISCountyName;
+            var nonSpatialRecord = nonSpatialData[i];
+            var nonSpatialKey = nonSpatialRecord.AFFGEOID;
             
           for (var a=0; a < spatialData.length; a++){
               
-              var spatialCounty = spatialData[a];
-              var spatialKey = spatialCounty.properties.name;
+              var spatialRecord = spatialData[a];
+              var spatialKey = spatialRecord.properties.AFFGEOID;
               
               if (spatialKey == nonSpatialKey){
                   console.log("The Keys Match!");
                   
-                  spatialCounty.name = nonSpatialKey;
+                  spatialRecord.name = nonSpatialRecord.name;
+                  spatialRecord.AFFGEOID = "G" + nonSpatialRecord.AFFGEOID;
                   
                   //join the two datasets together and push the object into the new master array
                   attrArray.forEach(function (attr){
-                      var val = parseFloat(nonSpatialCounty[attr]);
-                      spatialCounty[attr] = val;
+                      var val = parseFloat(nonSpatialRecord[attr]);
+                      spatialRecord[attr] = val;
                   });
                   
-                  dataList.push(spatialCounty);
+                  dataList.push(spatialRecord);
               }
           }
         }
@@ -146,14 +147,14 @@ function runScript () {
         
         
         //add and style county geometries
-        var counties = mapInterior
-            .selectAll(".countyGeo")
+        var districts = mapInterior
+            .selectAll(".districtGeo")
             .data(dataList)
             .enter()
             .append("path")
             .attr("d", pathGenerator)
             .attr("class" , function(d) {
-                return "countyGeo" + " "  + d.name
+                return "districtGeo" + " "  + d.AFFGEOID
             })
             .style("stroke" , "grey")
             .attr("stroke-width" , "0.5px")
@@ -163,21 +164,11 @@ function runScript () {
             .on("mouseover", highlight)
             .on("mouseout" , dehighlight);//apply event binding so quick popups will show up on each element
         
-        //add title elements to each svg element
-        counties.append("title")
-            .attr("class" , "tooltip")
-            .text(function(d) {
-                return d.name + " County: " + d[selectedField];
-        })
-        
-        
     }
     
     //adds the bars into the bar graph and gives them approprate color coding
     function createGraph () {
         console.log("create graph called");
-        
-        var fistAttr = attrArray[0];
         
         graph.append("rect")
             .attr("width" , graphwidth + graphPaddingRight + graphPaddingLeft)
@@ -198,7 +189,7 @@ function runScript () {
             .append("rect")
             .attr("transform" , "translate(20, 0) scale(0.9,1)")
             .attr("class" , function (d) {
-                return "bars " + d.name
+                return "bars " + d.AFFGEOID
             })
             .style("fill" , function (d) {
                 return colorScale(d[selectedField]);
@@ -218,13 +209,6 @@ function runScript () {
             .on("mouseover", highlight)
             .on("mouseout" , dehighlight)
             ;
-        
-        //add a tooltip to each bar element
-        bars.append("title")
-            .attr("class" , "tooltip")
-            .text(function(d) {
-                return d.name + " County: " + d[selectedField];
-        });
         
         //add an axis to the bargraph
         chartInterior.append("g")
@@ -299,7 +283,7 @@ function runScript () {
             ;
         
         //change the map based elemeents
-        d3.selectAll(".countyGeo")
+        d3.selectAll(".districtGeo")
             .data(dataList)
             .transition()
             .duration(1000)
@@ -330,7 +314,7 @@ function runScript () {
         //the div is inside. I worked around this by having two divs inside the colums for each svg. for the code to work
         //properly I need to determine which type of object is calling this function, a map geometry or a bar.
         //depending on which is calling I will set up the popup for either the map or graph but not both.
-        if (d3.select(this).attr("class").split(" ")[0] == "countyGeo") {
+        if (d3.select(this).attr("class").split(" ")[0] == "districtGeo") {
             var divPopup = d3.select("#tooltip-popup-map");
         } else {
             var divPopup = d3.select("#tooltip-popup-graph");
@@ -338,7 +322,7 @@ function runScript () {
         
         //change the content of the popup header
         divPopup.select("h4")
-            .text(d.name + " County: ");
+            .text(d.name);
         
         //change the number values inside of the popup.
         divPopup.select("p")
@@ -355,12 +339,12 @@ function runScript () {
     //function that removes hightlight coloring and popups when either map or graph are moused out
     function dehighlight () {
         //get the second class in the object of svg element that called function, the second class in the list is the county name
-        var countyClass = "." + d3.select(this).attr("class").split(" ")[1];
+        var districtClass = "." + d3.select(this).attr("class").split(" ")[1];
         
-        console.log(countyClass);
+        console.log(districtClass);
         
         //select both the map geometry and bar with the same corresponding county class, then apply colors for highlighting
-        d3.selectAll(countyClass)
+        d3.selectAll(districtClass)
             .transition()
             .style("fill" , function (d) {
                 return colorScale(d[selectedField]);
@@ -376,14 +360,16 @@ function runScript () {
     
     //ajax function that starts to load data
     Promise.all([
-        d3.csv("data/counties-nonspatial.csv"),
-        d3.json("data/Counties.json")
+        d3.csv("data/congressional_nonSpatial.csv"),
+        d3.json("data/congressional_districts.json")
     ]).then(function (files) {
+        
+        
         joinData(files);//merge data from the two different files together
         modifyScales();//modify the 3d scales according to the currently selected datafield
         createMap();//add all of the geometry into the map
         createGraph();//add all of the bars into the graph and style accordingly
-
+        
         
     }).catch( function (error) {
         console.log("Something has failed: " + error);
