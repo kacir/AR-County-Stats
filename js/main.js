@@ -15,9 +15,9 @@ function runScript () {
     var graphwidth = 400;
     
     var graphPaddingRight = 15;
-    var graphPaddingLeft = 25;
+    var graphPaddingLeft = 55;
     var graphPaddingBottom = 40;
-    var graphPaddingTop = 20;
+    var graphPaddingTop = 25;
     
     
     var dataList = [];//array that will hold all of the master joined data, d3 will have to work with this array
@@ -69,12 +69,9 @@ function runScript () {
         .attr("height" , graphheight + graphPaddingBottom + graphPaddingTop)
         .attr("width" , graphwidth + graphPaddingRight + graphPaddingLeft);
     
-    //graph title shown inside of svg
-    var graphTitle = d3.select(".graphTitle")
-        .text(selectedLabel);
     
     //set scales that will be used inside of the graph to scale the bars correctly
-    var xScale = d3.scaleOrdinal();
+    var xScale = d3.scaleLinear();
     var colorScale = d3.scaleLinear();
     var heightScale = d3.scaleLinear();
     var heightScaleReversed = d3.scaleLinear();
@@ -201,8 +198,8 @@ function runScript () {
             .attr("y" , function (d) {
                 return graphheight  - heightScale(d[selectedField]);
             })
-            .attr("x" , function (d) {
-                return xScale(d[selectedField]);
+            .attr("x" , function (d, i) {
+                return xScale(i);
             })
             .attr("stroke" , "white")
             .attr("stroke-width" , 0.5)
@@ -215,6 +212,24 @@ function runScript () {
             .attr("class" , "yAxis")
             .attr("transform" , "translate(20, 0)")
             .call(yAxis);
+        
+        //place an x axis inside of the graph
+        graph.append("text")
+            .text("Congressional Districts")
+            .attr("class" , "axis-label")
+            .style("text-anchor", "middle")
+            .style("font-size" , "14px")
+            .attr("transform" , "translate (" + ((graphwidth + graphPaddingRight + graphPaddingLeft) / 2) + " , " + ((graphheight + graphPaddingTop) + (graphPaddingBottom / 1.8)) + " )");
+        
+        //add in y axis label
+        graph.append("text")
+            .text(selectedLabel)
+            .attr("class" , "axis-label")
+            .attr("id" , "y-axis-label")
+            .style("text-anchor", "middle")
+            .style("font-size" , "14px")
+            .attr("transform" , "translate (" + (graphPaddingLeft / 2) + " , " + ((graphheight + graphPaddingTop + graphPaddingBottom) / 2) + ") rotate(-90)")
+            ;
         
     }
     
@@ -239,7 +254,7 @@ function runScript () {
         }
         
         //update the input domains for each of the different graphic scales
-        xScale.domain(tempList).range(fieldPositionsList);
+        xScale.domain([0 , dataList.length]).range([0 , graphwidth]);
         colorScale.domain(inputDomain).range(["yellow" ,"green"]);
         heightScale.domain(inputDomain).range([0 , graphheight]);
         heightScaleReversed.domain([max, min]).range([0 , graphheight]);
@@ -256,11 +271,10 @@ function runScript () {
     function changeVariable () {
         
         //change the graph title information on the top of graph
-        graphTitle.text(selectedLabel);
+        d3.select("#y-axis-label").text(selectedLabel);
         
         //change the style of the bar elemenets in graph
         d3.selectAll(".bars")
-            .data(dataList)
             .transition()
             .duration(1000)
             .style("fill" , function (d) {
@@ -273,8 +287,8 @@ function runScript () {
             .attr("y" , function (d) {
                 return graphheight - heightScale(d[selectedField]);
             })
-            .attr("x" , function (d) {
-                return xScale(d[selectedField]);
+            .attr("x" , function (d , i) {
+                return xScale(i);
             })
             .selectAll(".tooltip")//chanage the contents of the tooltip for each bar
             .text(function(d) {
@@ -332,7 +346,7 @@ function runScript () {
         divPopup.classed("hidden", false)
             .transition()
             .style("left" , coords[0] + "px")
-            .style("top" , coords[1] + "px");
+            .style("top" , (coords[1] ) + "px");
         
     }
     
