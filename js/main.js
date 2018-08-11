@@ -26,6 +26,10 @@ function runScript () {
     var selectedField = attrArray[0];//the field that is currently selected in the dropdown
     var attrArrayLabel = ["Percent Male" , "Percent Female" , "Median Age" , "Percent One Race" , "Percent White" , "Percent Black" , "Percent Hispanic" , "Percent Trump" , "Percent Clinton"];
     var selectedLabel = attrArrayLabel[0];
+    var formatPercent = d3.format(".1%");//d3 tick formating for an axis shown as a percentage
+    var attrArrayTicks = [formatPercent , formatPercent , d3.format(""), formatPercent, formatPercent, formatPercent, formatPercent, formatPercent, formatPercent];
+    var selectedFormat = attrArrayTicks[0]
+    
     
     //make the projection object which will help tranlate the json into an svg
     var projection = d3.geoAlbers()
@@ -52,6 +56,7 @@ function runScript () {
         console.log("change dropdown event triggered, starting to change graph");
         selectedField = this.options[this.selectedIndex].value;
         selectedLabel = attrArrayLabel[attrArray.indexOf(selectedField)];
+        selectedFormat = attrArrayTicks[attrArray.indexOf(selectedField)];
         console.log("new field is " + selectedField);
         
         modifyScales();//update the scales to deal with the newly selected field
@@ -77,7 +82,8 @@ function runScript () {
     var heightScaleReversed = d3.scaleLinear();
     
     var yAxis = d3.axisLeft()
-        .scale(heightScaleReversed);
+        .scale(heightScaleReversed)
+        .tickFormat(selectedFormat);
     
     
     
@@ -260,7 +266,7 @@ function runScript () {
         heightScaleReversed.domain([max, min]).range([0 , graphheight]);
         
         //modify and update the yAxis scale to match to updated underlaying scale for height
-        yAxis.scale(heightScaleReversed);
+        yAxis.scale(heightScaleReversed).tickFormat(selectedFormat);
         d3.selectAll(".yAxis")
             .transition()
             .duration(1000)
@@ -340,7 +346,7 @@ function runScript () {
         
         //change the number values inside of the popup.
         divPopup.select("p")
-            .text( selectedLabel + " Value is " + d[selectedField]);
+            .text( selectedLabel + " Value is " + selectedFormat(d[selectedField]));
         
         //remove the .hidden class so the CSS rules making it not display are removed. Then place according the the mouse position
         divPopup.classed("hidden", false)
