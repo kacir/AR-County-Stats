@@ -262,7 +262,7 @@ function runScript () {
         //update the input domains for each of the different graphic scales
         xScale.domain([0 , dataList.length]).range([0 , graphwidth]);
         colorScale.domain(inputDomain).range(["yellow" ,"green"]);
-        heightScale.domain(inputDomain).range([0 , graphheight]);
+        heightScale.domain(inputDomain).range([15 , graphheight]);
         heightScaleReversed.domain([max, min]).range([0 , graphheight]);
         
         //modify and update the yAxis scale to match to updated underlaying scale for height
