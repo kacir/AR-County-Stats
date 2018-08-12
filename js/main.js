@@ -159,8 +159,8 @@ function runScript () {
             .attr("class" , function(d) {
                 return "districtGeo" + " "  + d.AFFGEOID
             })
-            .style("stroke" , "grey")
-            .attr("stroke-width" , "0.5px")
+            .style("stroke" , "black")
+            .attr("stroke-width" , "0.3px")
             .style("fill" , function (d) {
                 return colorScale(d[selectedField]);
             })
@@ -346,13 +346,13 @@ function runScript () {
         
         //change the number values inside of the popup.
         divPopup.select("p")
-            .text( selectedLabel + " Value is " + selectedFormat(d[selectedField]));
+            .text( selectedLabel + " is: " + selectedFormat(d[selectedField]));
         
         //remove the .hidden class so the CSS rules making it not display are removed. Then place according the the mouse position
         divPopup.classed("hidden", false)
             .transition()
-            .style("left" , coords[0] + "px")
-            .style("top" , (coords[1] ) + "px");
+            .style("left" , (coords[0] + 80) + "px")
+            .style("top" , (coords[1] + 50) + "px");
         
     }
     
