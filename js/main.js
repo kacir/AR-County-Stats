@@ -1,7 +1,7 @@
 function runScript () {
     
     //set some constants that will be used to determine the size of the map
-    var mapheight = 400;
+    var mapheight = 350;
     var mapwidth = 400;
     
     var mapPaddingRight = 15;
@@ -85,7 +85,10 @@ function runScript () {
         .scale(heightScaleReversed)
         .tickFormat(selectedFormat);
     
-    
+    //define function to help d3 find min and max values for a selected field
+    function returnValue (d) {
+        return d[selectedField];
+    }
     
     
     
@@ -167,6 +170,47 @@ function runScript () {
             .on("mouseover", highlight)
             .on("mouseout" , dehighlight);//apply event binding so quick popups will show up on each element
         
+        //setting up data to be used in the legend
+        var legendItems = [{val : d3.max(dataList , returnValue) , label : "Max"} , 
+                           {val : ((d3.max(dataList , returnValue) + d3.min(dataList, returnValue)) / 2) , label : "Middle"},  
+                           {val : d3.min(dataList, returnValue), label : "Min" }];
+        
+        
+        //add a group which will contain all elements inside of the legend
+        mapLegendGroup = mapInterior.append("g")
+            .attr("id" , "map-legend");
+        
+        //add the legend rectangles
+        mapLegendGroup.selectAll("rect.legend")
+            .data(legendItems)
+            .enter()
+            .append("rect")
+            .attr("class" , "legend")
+            .attr("width" , "20px")
+            .attr("height" , "10px")
+            .attr("x" , 0)
+            .attr("y" , function (d , i) {
+                return i * 15;
+            })
+            .style("stroke-width" , 0.5)
+            .style("stroke" , "black")
+            .style("fill" , function (d) {
+                return colorScale(d.val);
+            });
+        
+        //add the labels next to the rectangles
+        mapLegendGroup.selectAll("text")
+            .data(legendItems)
+            .enter()
+            .append("text")
+            .attr("class" , "legendText")
+            .text(function (d) {return d.label + " - " + selectedFormat(d.val) ;})
+            .attr("x" , 23)
+            .attr("y" , function (d , i) {
+                return (i * 15 ) + 10;
+            })
+            ;
+
     }
     
     //adds the bars into the bar graph and gives them approprate color coding
@@ -241,10 +285,7 @@ function runScript () {
     
     function modifyScales() {
         
-        //define function to help d3 find min and max values for a selected field
-        function returnValue (d) {
-            return d[selectedField];
-        }
+        
         
             
         var fieldPositionsList = d3.range(0 , graphwidth, graphwidth / dataList.length);
@@ -314,6 +355,21 @@ function runScript () {
             .text(function(d) {
                 return d.name + " County: " + d[selectedField];
             });
+        
+        
+        //setting up data to be used in the legend
+        var legendItems = [{val : d3.max(dataList , returnValue) , label : "Max"} , 
+                           {val : ((d3.max(dataList , returnValue) + d3.min(dataList, returnValue)) / 2) , label : "Middle"},  
+                           {val : d3.min(dataList, returnValue), label : "Min" }];
+        
+        //change the text of the legend
+        d3.selectAll(".legendText")
+            .data(legendItems)
+            .transition()
+            .text(function (d) {return d.label + " - " + selectedFormat(d.val) ;})
+            ;
+        
+        
         
     }
     
@@ -396,8 +452,6 @@ function runScript () {
     });
         
     
-    
-    console.log("testing, testing my test!");
     
 }
 

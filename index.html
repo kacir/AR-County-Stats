@@ -26,30 +26,32 @@
             <div class="row">
                 <div id="dropdownDiv" class="col-lg-12 p-5 group">
                     <center>
-                    <h4>Select an Demographic Factor</h4>
-                    <select class="dropdown">
-                    </select>
-                        <p>The "Deep South" is considered to be a major stronghold for conservatives and conservative values. Canidates running for office in these areas really have to understand what their typical voter is like. Demographics can play a key role in understanding why certain districts vote for a particular canidate. The following data visualizaation tool uses demographic information taken from the US census and 2016 election results from the cook political report's <a target="_blank" href="https://www.cookpolitical.com/introducing-2017-cook-political-report-partisan-voter-index">2017 political report partisan voter index</a>. Changes the demographic above to see how a demographic various accross deep south congressional districts.</p>
+                        <div id="dropdownGroup" class="center">
+                            <h4>Select an Demographic Factor:</h4>
+                            <select class="dropdown">
+                            </select>
+                        </div>
+                        <p>The "Deep South" is considered to be a major stronghold for conservatives and conservative values. Candidates running for office in these areas really have to understand what their typical voter is like. Demographics can play a key role in understanding why certain districts vote for a particular candidate. The following data visualization tool uses demographic information taken from the US census and 2016 election results from the Cook Political Report's <a target="_blank" href="https://www.cookpolitical.com/introducing-2017-cook-political-report-partisan-voter-index">2017 political report partisan voter index</a>. Changes the demographic above to see how a demographic various across deep south congressional districts.</p>
                     </center>
                 </div>
                 
-                <div class="col-lg-6 p-5 group">
-                    <h3 class="graphTitle" >"Deep South" Congressional Districts</h3>
+                <div id="mapdivCell" class="col-lg-6 p-5 group ">
+                    <h3 id="mapTitleHeader" class="graphTitle" >"Deep South" Congressional Districts</h3>
                     <div id="tooltip-popup-map" class="tooltip-popup hidden"><h4>name of the thing</h4><p>The Value of the attribute is <strong>XXX</strong></p> </div>
-                    <svg id="map" class="svgpanel"></svg>
+                    <svg id="map" class="svgpanel "></svg>
                 </div>
             
                 <div class="col-lg-6  group">
                     <div id="tooltip-popup-graph" class="tooltip-popup hidden"><h4>name of the thing</h4><p>The Value of the attribute is <strong>XXX</strong></p> </div>
                     <h3 class="graphTitle">Graph of Congressional Districts</h3>
-                    <svg id="master-graph" ></svg>
+                    <svg id="master-graph" class=""></svg>
                 </div>
             
             </div>
         </div>
         
         <br/>
-        <footer>These tools were made possible with the following javascript libraires, d3, and jquery</footer>
+        <footer>These tools were made possible with the following javascript libraires: d3, jquery, and Bootstrap</footer>
 	</body>
     
             <!--put your external script links here-->

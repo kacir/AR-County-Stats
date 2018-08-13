@@ -28,6 +28,7 @@ body {
 }
 
 p {
+    padding-top: 1%;
     font-size: 14px;
     text-align: left;
 }
@@ -42,6 +43,17 @@ footer {
     margin-bottom: 1%;
 }
 
+#dropdownGroup {
+    display: flex;
+    flex-direction: row; 
+    padding: 1%;
+    padding-bottom: 2%;
+    margin:0 auto;
+}
+
+#dropdownGroup h4 {
+    padding-right: 2%;
+}
 
 
 /** This colors and styles the bootstrap cells **/
@@ -62,8 +74,11 @@ div.group {
 
 .dropdown {
     font-size: 14px;
-    padding: 0.5%;
-    margin: 1%;
+    padding-left: 1%;
+}
+
+#mapTitleHeader {
+    padding-top : 0px;
 }
 
 
