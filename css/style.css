@@ -1,23 +1,21 @@
-.graphTitle {
-    color : "black";
-    font: bold 30px sans-serif;
-}
-
+/**very general html tags **/
 h3, h1, footer {
     text-align: center;
+}
+
+h1 {
+     padding-top: 1%;
+    font-size: 24px;
+    font-weight: normal;
 }
 
 h3 {
     padding-top: 5%;
 }
 
-div.group {
-    border-style: solid;
-    border-color: black;
-    border-radius: 15px;
-    border-width: 1.5px;
-    
-    background-color : #E0E0E0;
+h4 {
+    font-size: 15px;
+    font-weight: bold;
 }
 
 svg {
@@ -25,19 +23,86 @@ svg {
 }
 
 body {
-    padding-top : 3%;
+    padding-top : 1%;
+    font-family: sans-serif;
 }
 
-title.tooltip {
+p {
+    padding-top: 1%;
+    font-size: 14px;
+    text-align: left;
+}
+
+a {
+    color : green;
+}
+
+footer {
+    font-size : 12px;
+    padding-bottom: 1%;
+    margin-bottom: 1%;
+}
+
+#dropdownGroup {
+    display: flex;
+    flex-direction: row; 
+    padding: 1%;
+    padding-bottom: 2%;
+    margin:0 auto;
+}
+
+#dropdownGroup h4 {
+    padding-right: 2%;
+}
+
+
+/** This colors and styles the bootstrap cells **/
+div.group {
+    border-style: solid;
+    border-color: black;
+    border-radius: 15px;
+    border-width: 1.5px;
+    
+    background-color : #E0E0E0;
+    
+}
+
+.graphTitle {
+    color : "black";
+    font: normal 18px sans-serif;
+}
+
+.dropdown {
+    font-size: 14px;
+    padding-left: 1%;
+}
+
+#mapTitleHeader {
+    padding-top : 0px;
+}
+
+
+
+
+/*All of these lines refer to the hoverover div element and its behavior*/
+
+
+/** This prevents the div from reacting to the mouse over event which would prevent the event for being fired for the svg elements below it **/
+title.tooltip, .tooltip-popup-map, .tooltip-popup {
     pointer-events: none;
 }
 
+/** class is assigned to hover over divs when no mouse over event has been fired. This class hides the div. **/
+.hidden {
+    display: none;
+}
 
+/**selector dives the hoverover div's style for their positioning, borders and backshadow **/
 .tooltip-popup {
     position: absolute;
     border-radius: 15px;
     border-style: solid;
-    border-width: 3px;
+    border-width: 2px;
     border-color: black;
     background-color: white;
     padding : 1.5%;
@@ -50,15 +115,14 @@ title.tooltip {
 	pointer-events: none;
 }
 
+/**sets the size of the congressional district name inside of the hoverover div **/
 .tooltip-popup h4 {
     font-size: 14px;
     text-align: center;
 }
 
+/**sets the size of the number value discription inside of the hover over div **/
 .tooltip-popup p {
     font-size: 12px;
 }
 
-.hidden {
-    display: none;
-}

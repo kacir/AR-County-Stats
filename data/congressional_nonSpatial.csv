@@ -1,0 +1,39 @@
+AFFGEOID,GEO.id2,name,percentMale,percentFemale,medianAge,percentOneRace,percentWhite,percentBlack,percentHispanic,Selected,percentTrump,percentClinton
+5001500US0101,101,"Congressional District 1 , Alabama",0.484,0.516,39.1,0.983,0.674,0.277,0.03,selected,0.63,0.34
+5001500US0102,102,"Congressional District 2 , Alabama",0.487,0.513,38.2,0.981,0.647,0.309,0.035,selected,0.65,0.33
+5001500US0103,103,"Congressional District 3 , Alabama",0.488,0.512,38.1,0.983,0.701,0.254,0.029,selected,0.65,0.32
+5001500US0104,104,"Congressional District 4 , Alabama",0.49,0.51,40.7,0.982,0.881,0.07,0.062,selected,0.8,0.17
+5001500US0105,105,"Congressional District 5 , Alabama",0.489,0.511,39.3,0.974,0.767,0.172,0.049,selected,0.64,0.31
+5001500US0106,106,"Congressional District 6 , Alabama",0.485,0.515,38.8,0.985,0.796,0.147,0.049,selected,0.7,0.26
+5001500US0107,107,"Congressional District 7 , Alabama",0.47,0.53,35.8,0.989,0.334,0.634,0.027,selected,0.28,0.7
+5001500US1301,1301,"Congressional District 1 , Georgia",0.493,0.507,35,0.971,0.633,0.296,0.066,selected,0.56,0.41
+5001500US1302,1302,"Congressional District 2 , Georgia",0.491,0.509,35.7,0.979,0.429,0.516,0.049,selected,0.43,0.55
+5001500US1303,1303,"Congressional District 3 , Georgia",0.485,0.515,37.8,0.975,0.702,0.238,0.056,selected,0.64,0.33
+5001500US1304,1304,"Congressional District 4 , Georgia",0.473,0.527,35.3,0.979,0.304,0.591,0.092,selected,0.22,0.75
+5001500US1305,1305,"Congressional District 5 , Georgia",0.483,0.517,33.5,0.977,0.324,0.585,0.07,selected,0.12,0.85
+5001500US1306,1306,"Congressional District 6 , Georgia",0.495,0.505,37.7,0.973,0.701,0.137,0.123,selected,0.48,0.47
+5001500US1307,1307,"Congressional District 7 , Georgia",0.492,0.508,35.5,0.975,0.577,0.195,0.191,selected,0.51,0.45
+5001500US1308,1308,"Congressional District 8 , Georgia",0.49,0.51,36.7,0.98,0.64,0.304,0.063,selected,0.63,0.34
+5001500US1309,1309,"Congressional District 9 , Georgia",0.493,0.507,40.2,0.985,0.869,0.069,0.124,selected,0.78,0.19
+5001500US1310,1310,"Congressional District 10 , Georgia",0.487,0.513,36.3,0.98,0.691,0.253,0.056,selected,0.61,0.36
+5001500US1311,1311,"Congressional District 11 , Georgia",0.49,0.51,36.1,0.977,0.738,0.162,0.112,selected,0.6,0.35
+5001500US1312,1312,"Congressional District 12 , Georgia",0.492,0.508,35.2,0.98,0.591,0.35,0.058,selected,0.57,0.41
+5001500US1313,1313,"Congressional District 13 , Georgia",0.47,0.53,35.2,0.977,0.331,0.579,0.107,selected,0.27,0.71
+5001500US1314,1314,"Congressional District 14 , Georgia",0.491,0.509,37.6,0.983,0.854,0.089,0.111,selected,0.75,0.22
+5001500US2201,2201,"Congressional District 1 , Louisiana",0.487,0.513,38.1,0.979,0.796,0.133,0.086,selected,0.69,0.27
+5001500US2202,2202,"Congressional District 2 , Louisiana",0.479,0.521,35.6,0.984,0.315,0.622,0.06,selected,0.22,0.75
+5001500US2203,2203,"Congressional District 3 , Louisiana",0.489,0.511,35.7,0.978,0.707,0.244,0.037,selected,0.67,0.29
+5001500US2204,2204,"Congressional District 4 , Louisiana",0.493,0.507,36.3,0.979,0.611,0.34,0.038,selected,0.61,0.37
+5001500US2205,2205,"Congressional District 5 , Louisiana",0.497,0.503,36.8,0.988,0.617,0.355,0.023,selected,0.64,0.34
+5001500US2206,2206,"Congressional District 6 , Louisiana",0.489,0.511,35.2,0.982,0.707,0.24,0.043,selected,0.65,0.31
+5001500US2801,2801,"Congressional District 1 , Mississippi",0.485,0.515,37.4,0.987,0.696,0.272,0.031,selected,0.65,0.32
+5001500US2802,2802,"Congressional District 2 , Mississippi",0.48,0.52,35.6,0.993,0.319,0.656,0.021,selected,0.35,0.64
+5001500US2803,2803,"Congressional District 3 , Mississippi",0.484,0.516,37.1,0.991,0.613,0.351,0.024,selected,0.61,0.37
+5001500US2804,2804,"Congressional District 4 , Mississippi",0.491,0.509,36.8,0.982,0.72,0.234,0.04,selected,0.69,0.28
+5001500US4501,4501,"Congressional District 1 , South Carolina",0.485,0.515,38.3,0.975,0.746,0.19,0.064,selected,0.53,0.41
+5001500US4502,4502,"Congressional District 2 , South Carolina",0.488,0.512,38.3,0.975,0.705,0.233,0.053,selected,0.57,0.38
+5001500US4503,4503,"Congressional District 3 , South Carolina",0.49,0.51,40.2,0.982,0.769,0.185,0.045,selected,0.67,0.29
+5001500US4504,4504,"Congressional District 4 , South Carolina",0.484,0.516,37.9,0.982,0.749,0.191,0.081,selected,0.6,0.34
+5001500US4505,4505,"Congressional District 5 , South Carolina",0.486,0.514,39.5,0.978,0.682,0.268,0.042,selected,0.57,0.39
+5001500US4506,4506,"Congressional District 6 , South Carolina",0.488,0.512,35.4,0.981,0.382,0.57,0.047,selected,0.3,0.67
+5001500US4507,4507,"Congressional District 7 , South Carolina",0.48,0.52,42,0.983,0.664,0.291,0.041,selected,0.58,0.39
