@@ -43,14 +43,18 @@ footer {
     margin-bottom: 1%;
 }
 
+
+
+
+/* changes the positioning of the dropdown and select a demographic factor so they are next to each other rather than above and below */
 #dropdownGroup {
     display: flex;
     flex-direction: row; 
-    padding: 1%;
+    padding: 0.5%;
     padding-bottom: 2%;
-    margin:0 auto;
+    margin: auto;
 }
-
+/* creates space between the dropdown description and dropdown */
 #dropdownGroup h4 {
     padding-right: 2%;
 }
@@ -67,16 +71,20 @@ div.group {
     
 }
 
+/** controls the text of the graph and congressional map headers **/
 .graphTitle {
     color : "black";
     font: normal 18px sans-serif;
 }
 
+/** controls the dynamic dropdown contents **/
 .dropdown {
     font-size: 14px;
-    padding-left: 1%;
+    padding-left: 0.5%;
+    margin-left: 1%;
 }
 
+/** controls the title for the map **/
 #mapTitleHeader {
     padding-top : 0px;
 }

@@ -5,8 +5,8 @@ function runScript () {
     var mapwidth = 400;
     
     var mapPaddingRight = 15;
-    var mapPaddingLeft = 15;
-    var mapPaddingTop = 15;
+    var mapPaddingLeft = 25;
+    var mapPaddingTop = 25;
     var mapPaddingBottom = 15;
     
     
@@ -15,7 +15,7 @@ function runScript () {
     var graphwidth = 400;
     
     var graphPaddingRight = 15;
-    var graphPaddingLeft = 55;
+    var graphPaddingLeft = 65;
     var graphPaddingBottom = 40;
     var graphPaddingTop = 25;
     
@@ -180,6 +180,8 @@ function runScript () {
         mapLegendGroup = mapInterior.append("g")
             .attr("id" , "map-legend");
         
+
+        
         //add the legend rectangles
         mapLegendGroup.selectAll("rect.legend")
             .data(legendItems)
@@ -190,7 +192,7 @@ function runScript () {
             .attr("height" , "10px")
             .attr("x" , 0)
             .attr("y" , function (d , i) {
-                return i * 15;
+                return (i * 15) + 10;
             })
             .style("stroke-width" , 0.5)
             .style("stroke" , "black")
@@ -207,9 +209,16 @@ function runScript () {
             .text(function (d) {return d.label + " - " + selectedFormat(d.val) ;})
             .attr("x" , 23)
             .attr("y" , function (d , i) {
-                return (i * 15 ) + 10;
+                return (i * 15 ) + 10 + 10;
             })
             ;
+        
+        //add a dynamic label to the legend
+        mapLegendGroup.append("text")
+            .text(selectedLabel)
+            .attr("x" , 35)
+            .style("text-anchor", "middle")
+            .attr("class" , "dynamicFieldLabel");
 
     }
     
@@ -228,7 +237,7 @@ function runScript () {
             .attr("class" , "barSpace")
             .attr("transform", "translate(" + graphPaddingLeft + "," + graphPaddingTop + ")");
         
-        
+        //adds bars to the inside of the svg
         var bars = chartInterior
             .selectAll(".bars")
             .data(dataList)
@@ -274,7 +283,7 @@ function runScript () {
         //add in y axis label
         graph.append("text")
             .text(selectedLabel)
-            .attr("class" , "axis-label")
+            .attr("class" , "axis-label dynamicFieldLabel")
             .attr("id" , "y-axis-label")
             .style("text-anchor", "middle")
             .style("font-size" , "14px")
@@ -303,8 +312,8 @@ function runScript () {
         //update the input domains for each of the different graphic scales
         xScale.domain([0 , dataList.length]).range([0 , graphwidth]);
         colorScale.domain(inputDomain).range(["yellow" ,"green"]);
-        heightScale.domain(inputDomain).range([15 , graphheight]);
-        heightScaleReversed.domain([max, min]).range([0 , graphheight]);
+        heightScale.domain(inputDomain).range([20 , graphheight - 20]);
+        heightScaleReversed.domain([max, min]).range([20 , graphheight -20]);
         
         //modify and update the yAxis scale to match to updated underlaying scale for height
         yAxis.scale(heightScaleReversed).tickFormat(selectedFormat);
@@ -318,7 +327,7 @@ function runScript () {
     function changeVariable () {
         
         //change the graph title information on the top of graph
-        d3.select("#y-axis-label").text(selectedLabel);
+        d3.selectAll(".dynamicFieldLabel").text(selectedLabel);
         
         //change the style of the bar elemenets in graph
         d3.selectAll(".bars")
@@ -407,7 +416,7 @@ function runScript () {
         //remove the .hidden class so the CSS rules making it not display are removed. Then place according the the mouse position
         divPopup.classed("hidden", false)
             .transition()
-            .style("left" , (coords[0] + 80) + "px")
+            .style("left" , (coords[0] + 100) + "px")
             .style("top" , (coords[1] + 50) + "px");
         
     }
