@@ -401,8 +401,10 @@ function runScript () {
         //depending on which is calling I will set up the popup for either the map or graph but not both.
         if (d3.select(this).attr("class").split(" ")[0] == "districtGeo") {
             var divPopup = d3.select("#tooltip-popup-map");
+            coords = d3.mouse(d3.select("#mapdivCell").node());
         } else {
             var divPopup = d3.select("#tooltip-popup-graph");
+            coords = d3.mouse(d3.select("#graphdivCell").node());
         }
         
         //change the content of the popup header
@@ -416,8 +418,8 @@ function runScript () {
         //remove the .hidden class so the CSS rules making it not display are removed. Then place according the the mouse position
         divPopup.classed("hidden", false)
             .transition()
-            .style("left" , (coords[0] + 100) + "px")
-            .style("top" , (coords[1] + 50) + "px");
+            .style("left" , (coords[0] + 20) + "px")
+            .style("top" , (coords[1] + -80) + "px");
         
     }
     
